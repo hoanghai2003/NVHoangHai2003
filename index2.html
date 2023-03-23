@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body{
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+    }
+
+    h2 {
+      text-align: center;
+    }
+    button{
+      font-size: 25px;
+      border: none;
+      outline: none;
+      color:cadetblue;
+      cursor: pointer;
+      padding-left: 10px;
+      
+
+    }
+    .proname{
+      padding: 10px;
+    }
+  </style>
+  <body>
+    <h2>Quản Lí Nhân Viên</h2>
+    <div class="proname">
+      <label for="">NAME</label>
+      <input id="name" type="text" placeholder="nhập Tên" /><br />
+      <label for="">Mã Nhân Viên</label>
+      <input type="text" id="mnv" placeholder="Nhập Mã" /><br />
+      <label for="">Giới Tính</label>
+      <input type="text" id="sex" placeholder="Nhập " /><br />
+    </div>
+    <br />
+    <button onclick="saveFor()">SAVE</button><br /><br />
+    <table border="1px" id="table">
+      <!-- <tr>
+        <td>ID</td>
+        <td>NAME</td>
+        <td>Mã Nhân Viên </td>
+        <td>Giới Tính</td>
+        <td><button>EDIT</button></td>
+        <td><button>DELETE</button></td>
+      </tr> -->
+    </table>
+  </body>
+
+  <script>
+    let listProducts = [];
+    function saveFor() {
+      let name = document.getElementById("name").value;
+      let mnv = document.getElementById("mnv").value;
+      let sex = document.getElementById("sex").value;
+      let id = Math.floor(Math.random() * 100);
+
+      listName = {
+        id,
+        name: name,
+        mnv: mnv,
+        sex: sex,
+      };
+      let flag = JSON.parse(localStorage.getItem("flag"));
+      if (flag != null) {
+        listProducts.splice(flag, 1, listName);
+        localStorage.removeItem("flag");
+        renderlistProduct();
+        return;
+      }
+      listProducts.push(listName);
+      document.getElementById("name").value = " ";
+      document.getElementById("mnv").value = " ";
+      document.getElementById("sex").value = "";
+
+      renderlistProduct();
+      //   console.log(listProducts);
+    }
+
+    function renderlistProduct() {
+      let result = `
+        <tr>
+
+        <td>ID</td>
+        <td>NAME</td>
+        <td>Mã Nhân Viên</td>
+        <td>Giới Tính</td>
+        <td><button>EDIT</button></td>
+        <td><button>DELETE</button></td>
+ 
+        </tr>
+            `;
+      for (let i = 0; i < listProducts.length; i++) {
+        result += `
+        <tr>
+        <td>${i + 1}</td>
+        <td>${listProducts[i].name}</td>
+        <td>${listProducts[i].mnv}</td>
+        <td>${listProducts[i].sex}</td>
+        <td><button onclick="editPro(${i})"> EDIT</button></td>
+        <td><button onclick="deletePro(${i})"> DELETE</button></td>
+        </tr>
+         `;
+      }
+      document.getElementById("table").innerHTML = result;
+    }
+
+    function deletePro(id) {
+      listProducts.splice(id, 1);
+      renderlistProduct();
+    }
+
+    function editPro(id) {
+      console.log(editPro);
+      document.getElementById("name").value = listProducts[id].name;
+      document.getElementById("mnv").value = listProducts[id].mnv;
+      document.getElementById("sex").value = listProducts[id].sex;
+      localStorage.setItem("flag", id);
+    }
+  </script>
+</html>
